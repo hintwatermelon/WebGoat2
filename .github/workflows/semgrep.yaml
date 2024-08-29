@@ -25,9 +25,9 @@ jobs:
           mkdir -p semgrep/results
           semgrep --version
           semgrep --config auto . --sarif -o semgrep/results/semgrep.sarif
-      # upload to Pixee
-      # - name: Upload Semgrep Results to Pixee
-      #   uses: pixee/upload-tool-results-action@v2
-      #   with:
-      #     tool: semgrep
-      #     file: semgrep/results/semgrep.sarif
+      upload to Pixee
+      - name: Upload Semgrep Results to Pixee
+        uses: pixee/upload-tool-results-action@v2
+        with:
+          tool: semgrep
+          file: semgrep/results/semgrep.sarif
