@@ -1,0 +1,33 @@
+name: Semgrep Scan and Push to Pixee
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  semgrep-sast-scan:
+    name: Semgrep Scan and Push
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep
+    if: (github.actor != 'dependabot[bot]')
+    steps:
+      # do whatever...
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Semgrep Scan
+        run: |
+          mkdir -p semgrep/results
+          semgrep --version
+          semgrep --config auto . --sarif -o semgrep/results/semgrep.sarif
+      # upload to Pixee
+      - name: Upload Semgrep Results to Pixee
+        uses: pixee/upload-tool-results-action@v2
+        with:
+          tool: semgrep
+          file: semgrep/results/semgrep.sarif
