@@ -23,6 +23,7 @@
 package org.owasp.webgoat.lessons.xxe.introduction;
 
 import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Reflection;
 import io.github.pixee.security.Urls;
 import org.owasp.webgoat.container.assignments.AssignmentEndpoint;
 import org.springframework.web.bind.annotation.*;
@@ -82,7 +83,7 @@ public class TranslationController extends AssignmentEndpoint {
     private static TranslatorStrategy loadTranslatorByName(final String translationStrategy) {
         final Class<?> translatorClazz;
         try {
-            translatorClazz = Class.forName("com.acme." + translationStrategy);
+            translatorClazz = Reflection.loadAndVerify("com.acme." + translationStrategy);
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException("Invalid translator: " + translationStrategy, e);
         }
